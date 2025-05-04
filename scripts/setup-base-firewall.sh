@@ -34,9 +34,10 @@ iptables -A INPUT -p tcp --dport 22 -j ACCEPT
 for conf in /etc/wireguard/*.conf; do
     [ -f "$conf" ] || continue
     interface=$(basename "$conf" .conf)
+    alias=$(yq e ".vpn_configs.$interface.Alias" config-params.yml)
     iptables -A INPUT -p udp --dport 51820 -m conntrack --ctstate NEW -j ACCEPT
-    iptables -A FORWARD -i "$interface" -j ACCEPT
-    iptables -A FORWARD -o "$interface" -j ACCEPT
+    iptables -A FORWARD -i "$alias" -j ACCEPT
+    iptables -A FORWARD -o "$alias" -j ACCEPT
 done
 
 # Save iptables rules
