@@ -1,0 +1,9 @@
+[Unit]
+Description=Run WireGuard VPN Configuration Synchronization Every Hour
+
+[Timer]
+OnCalendar=hourly
+Persistent=true
+
+[Install]
+WantedBy=timers.target

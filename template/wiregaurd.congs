@@ -1,0 +1,13 @@
+[Interface]
+PrivateKey = <PRIVATE_KEY>
+Address = <CLIENT_IP>/32
+DNS = 10.255.255.2
+Table = off
+PostUp = /opt/wireguard-manager/scripts/setup-vpn-routing.sh %i
+PostDown = /opt/wireguard-manager/scripts/teardown-vpn-routing.sh %i
+
+[Peer]
+AllowedIPs = 0.0.0.0/0, ::/0
+PublicKey = <SERVER_PUBLIC_KEY>
+Endpoint = <SERVER_IP>:<PORT>
+PresharedKey = <PRE_SHARED_KEY>

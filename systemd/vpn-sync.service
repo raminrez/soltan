@@ -1,0 +1,9 @@
+[Unit]
+Description=WireGuard VPN Configuration Synchronization
+After=network.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/cp -f /opt/wireguard-configs-repo/configs/*.conf /etc/wireguard/
+ExecStart=/usr/bin/chmod 600 /etc/wireguard/*.conf
+ExecStart=/usr/bin/systemctl reload-or-restart wg-quick@*
