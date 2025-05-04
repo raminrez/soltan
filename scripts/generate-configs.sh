@@ -44,6 +44,12 @@ for VPN_CONFIG in $VPN_CONFIGS; do
     echo "Port: $PORT"
     echo "PresharedKey: $PRE_SHARED_KEY"
     
+    # Check if all required fields are present
+    if [[ -z "$PRIVATE_KEY" || -z "$CLIENT_IP" || -z "$PUBLIC_KEY" || -z "$ENDPOINT" || -z "$PRE_SHARED_KEY" || -z "$ALIAS" ]]; then
+        echo "Skipping configuration for $VPN_CONFIG due to missing fields."
+        continue
+    fi
+    
     # Replace placeholders in the template
     CONFIG_CONTENT=$(echo "$TEMPLATE" | sed "s|<PRIVATE_KEY>|$PRIVATE_KEY|g" | sed "s|<CLIENT_IP>|$CLIENT_IP|g" | sed "s|<SERVER_PUBLIC_KEY>|$SERVER_PUBLIC_KEY|g" | sed "s|<SERVER_IP>|$SERVER_IP|g" | sed "s|<PORT>|$PORT|g" | sed "s|<PRE_SHARED_KEY>|$PRE_SHARED_KEY|g")
     
