@@ -33,7 +33,7 @@ for VPN_CONFIG in $VPN_CONFIGS; do
     ALIAS=$(echo "$CONFIG_PARAMS" | yq e ".vpn_configs.$VPN_CONFIG.Alias" -)
     
     # Replace placeholders in the template
-    CONFIG_CONTENT=$(echo "$TEMPLATE" | sed "s/INTERFACE/$ALIAS/g" | sed "s/SERVER_PUBLIC_KEY/$SERVER_PUBLIC_KEY/g" | sed "s/SERVER_IP/$SERVER_IP/g" | sed "s/PORT/$PORT/g" | sed "s/PRE_SHARED_KEY/$PRE_SHARED_KEY/g")
+    CONFIG_CONTENT=$(echo "$TEMPLATE" | sed "s|INTERFACE|$ALIAS|g" | sed "s|SERVER_PUBLIC_KEY|$SERVER_PUBLIC_KEY|g" | sed "s|SERVER_IP|$SERVER_IP|g" | sed "s|PORT|$PORT|g" | sed "s|PRE_SHARED_KEY|$PRE_SHARED_KEY|g")
     
     # Write the configuration to the file
     echo "$CONFIG_CONTENT" > "$CONFIG_FILE"
