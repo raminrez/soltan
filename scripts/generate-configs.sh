@@ -34,6 +34,16 @@ for VPN_CONFIG in $VPN_CONFIGS; do
     PRE_SHARED_KEY=$(echo "$CONFIG_PARAMS" | yq e ".vpn_configs.$VPN_CONFIG.PresharedKey" -)
     ALIAS=$(echo "$CONFIG_PARAMS" | yq e ".vpn_configs.$VPN_CONFIG.Alias" -)
     
+    # Debugging statements
+    echo "Alias: $ALIAS"
+    echo "PrivateKey: $PRIVATE_KEY"
+    echo "ClientIP: $CLIENT_IP"
+    echo "PublicKey: $PUBLIC_KEY"
+    echo "Endpoint: $ENDPOINT"
+    echo "ServerIP: $SERVER_IP"
+    echo "Port: $PORT"
+    echo "PresharedKey: $PRE_SHARED_KEY"
+    
     # Replace placeholders in the template
     CONFIG_CONTENT=$(echo "$TEMPLATE" | sed "s|<PRIVATE_KEY>|$PRIVATE_KEY|g" | sed "s|<CLIENT_IP>|$CLIENT_IP|g" | sed "s|<SERVER_PUBLIC_KEY>|$SERVER_PUBLIC_KEY|g" | sed "s|<SERVER_IP>|$SERVER_IP|g" | sed "s|<PORT>|$PORT|g" | sed "s|<PRE_SHARED_KEY>|$PRE_SHARED_KEY|g")
     
