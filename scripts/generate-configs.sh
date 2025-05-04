@@ -13,7 +13,7 @@ CONFIG_PARAMS=$(cat config-params.yml)
 VPN_CONFIGS=$(echo "$CONFIG_PARAMS" | yq e '.vpn_configs | keys' -)
 
 # Read template file
-TEMPLATE=$(cat template/wiregaurd.congs)
+TEMPLATE=$(cat template/wireguard.conf)
 
 # Create configs directory if it doesn't exist
 mkdir -p configs
@@ -24,6 +24,8 @@ for VPN_CONFIG in $VPN_CONFIGS; do
     CONFIG_FILE="configs/${VPN_CONFIG}.conf"
     
     # Extract specific VPN configuration parameters
+    PRIVATE_KEY=$(echo "$CONFIG_PARAMS" | yq e ".vpn_configs.$VPN_CONFIG.PrivateKey" -)
+    CLIENT_IP=$(echo "$CONFIG_PARAMS" | yq e ".vpn_configs.$VPN_CONFIG.ClientIP" -)
     PUBLIC_KEY=$(echo "$CONFIG_PARAMS" | yq e ".vpn_configs.$VPN_CONFIG.PublicKey" -)
     ENDPOINT=$(echo "$CONFIG_PARAMS" | yq e ".vpn_configs.$VPN_CONFIG.Endpoint" -)
     SERVER_PUBLIC_KEY=${PUBLIC_KEY}
@@ -33,7 +35,7 @@ for VPN_CONFIG in $VPN_CONFIGS; do
     ALIAS=$(echo "$CONFIG_PARAMS" | yq e ".vpn_configs.$VPN_CONFIG.Alias" -)
     
     # Replace placeholders in the template
-    CONFIG_CONTENT=$(echo "$TEMPLATE" | sed "s|INTERFACE|$ALIAS|g" | sed "s|SERVER_PUBLIC_KEY|$SERVER_PUBLIC_KEY|g" | sed "s|SERVER_IP|$SERVER_IP|g" | sed "s|PORT|$PORT|g" | sed "s|PRE_SHARED_KEY|$PRE_SHARED_KEY|g")
+    CONFIG_CONTENT=$(echo "$TEMPLATE" | sed "s|<PRIVATE_KEY>|$PRIVATE_KEY|g" | sed "s|<CLIENT_IP>|$CLIENT_IP|g" | sed "s|<SERVER_PUBLIC_KEY>|$SERVER_PUBLIC_KEY|g" | sed "s|<SERVER_IP>|$SERVER_IP|g" | sed "s|<PORT>|$PORT|g" | sed "s|<PRE_SHARED_KEY>|$PRE_SHARED_KEY|g")
     
     # Write the configuration to the file
     echo "$CONFIG_CONTENT" > "$CONFIG_FILE"

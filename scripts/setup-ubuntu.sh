@@ -31,7 +31,14 @@ echo "Setting up base firewall..."
 
 # Step 6: Set up VPN routing
 echo "Setting up VPN routing..."
-./scripts/setup-vpn-routing.sh
+CONFIG_PARAMS=$(cat config-params.yml)
+VPN_CONFIGS=$(echo "$CONFIG_PARAMS" | yq e '.vpn_configs | keys' -)
+
+for VPN_CONFIG in $VPN_CONFIGS; do
+    ALIAS=$(echo "$CONFIG_PARAMS" | yq e ".vpn_configs.$VPN_CONFIG.Alias" -)
+    echo "Setting up VPN routing for $ALIAS..."
+    ./scripts/setup-vpn-routing.sh "$ALIAS"
+done
 
 # Step 7: Enable and start vpn-sync.timer
 echo "Enabling and starting vpn-sync.timer..."
